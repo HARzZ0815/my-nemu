@@ -7,7 +7,8 @@
 #include <regex.h>
 
 enum {
-	NOTYPE = 256, EQ
+	NOTYPE = 256, EQ , UEQ , logical_AND , logical_OR,
+	logical_NOT , Dec_integer
 
 	/* TODO: Add more token types */
 
@@ -22,9 +23,19 @@ static struct rule {
 	 * Pay attention to the precedence level of different rules.
 	 */
 
-	{" +",	NOTYPE},				// spaces
+	{" +",	NOTYPE},				// space
 	{"\\+", '+'},					// plus
-	{"==", EQ}						// equal
+	{"-",'-'},					//subtraction
+	{"\\*",'*'},					//multiplication
+	{"/",'/'},					//division
+	{"==", EQ},					// equal
+	{"!=", UEQ},					//unequal
+	{"&&",logical_AND},				//logical and
+	{"\\|\\|",logical_OR},				//logical or
+	{"!",logical_NOT},				//logical not
+	{"\\(",'('},					//left parenthesis
+	{"\\)",')'},                   			//right parenthesis
+	{"[0-9]{1,10}",Dec_integer}			//decimal integer
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
@@ -79,9 +90,35 @@ static bool make_token(char *e) {
 				 */
 
 				switch(rules[i].token_type) {
+					case 257:
+							tokens[nr_token].type = 257 ;
+							strcpy(tokens[nr_token].str , "==");
+							break;
+                                                case 258:
+                                                        tokens[nr_token].type = 258 ;
+                                                        strcpy(tokens[nr_token].str , "!=");
+                                                        break;
+                                                case 40:
+                                                        tokens[nr_token].type = 40 ;	//'('
+                                                        break;
+                                                case 41:
+                                                        tokens[nr_token].type = 41 ;	//')'
+                                                        break;
+                                                case 42:
+                                                        tokens[nr_token].type = 42 ;	//'*'
+                                                        break;
+                                                case 43:
+                                                        tokens[nr_token].type = 43 ;	//'+'
+                                                        break;
+                                                case 45:
+                                                        tokens[nr_token].type = 45 ;	//'-'	
+                                                        break;
+                                                case 47:
+                                                        tokens[nr_token].type = 47 ;	//'/'
+                                                        break;
 					default: panic("please implement me");
 				}
-
+				nr_token ++;
 				break;
 			}
 		}
