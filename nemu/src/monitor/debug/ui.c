@@ -38,6 +38,64 @@ static int cmd_q(char *args) {
 
 static int cmd_help(char *args);
 
+static int cmd_si(char *args){
+	int step = 0;
+	char *arg = strtok(NULL," ");
+	if (arg == NULL)	step =1;
+	else	sscanf(arg , "%d" , &step);
+	if(step == -1)		cpu_exec(-1);
+	if(step < -1)	printf("Wrong input\n");
+	if(step > -1)
+	while(step--)
+	cpu_exec(1);
+	return 0;
+}
+
+static int cmd_info(char *args){
+	char *arg = strtok(NULL," ");
+	if(*arg == 'r'){
+		printf("eax 0x%x\n",cpu.eax);
+		printf("ecx 0x%x\n",cpu.ecx);
+		printf("edx 0x%x\n",cpu.edx);
+		printf("ebx 0x%x\n",cpu.ebx);
+		printf("esp 0x%x\n",cpu.esp);
+		printf("ebp 0x%x\n",cpu.ebp);
+		printf("esi 0x%x\n",cpu.esi);
+		printf("edi 0x%x\n",cpu.edi);
+	}
+	return 0;	
+}
+
+static int cmd_x(char *args){
+	char *arg1 = strtok(NULL," ");
+	char *arg2 = strtok(NULL," ");
+	int len ;
+	int address;
+//	lnaddr_t address;
+	sscanf(arg1 , "%d" ,&len);
+	sscanf(arg2 , "%x" ,&address);
+//	printf("0x:%x\n",address);
+//	int i;
+//	for(i = 0; i<len ;i++){
+//		printf("0x%x\n",lnaddr_read(address,4));
+//		address+=4;
+//	}
+//		return 0;
+	
+	if(len !=0){
+		printf("%#x: ", address);
+		int i,j;
+		for( i=0 ; i<len ;i++){
+			for(j=0 ;j<4;j++){
+				printf("%02X ",swaddr_read(address+4*i+j,1));
+}
+}
+		printf("\n");
+}	
+		return 0;
+
+}
+
 static struct {
 	char *name;
 	char *description;
@@ -46,7 +104,9 @@ static struct {
 	{ "help", "Display informations about all supported commands", cmd_help },
 	{ "c", "Continue the execution of the program", cmd_c },
 	{ "q", "Exit NEMU", cmd_q },
-
+        { "si", "Single step instructions", cmd_si },
+	{ "info","Print register status" , cmd_info },
+	{ "x" ,"scan memory" , cmd_x },
 	/* TODO: Add more commands */
 
 };
