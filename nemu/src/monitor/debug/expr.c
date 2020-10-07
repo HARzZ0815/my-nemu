@@ -132,6 +132,89 @@ static bool make_token(char *e) {
 	return true; 
 }
 
+bool check_parentheses(int m ,int n){
+        int left = 0;
+        int flag = 0;
+        if(tokens[m].type == 40){
+                left ++;
+                int i;
+                for(i = m+1 ; i<=n ; i++){
+                        if(tokens[i].type == 40){
+                                left ++ ;
+                        }
+                        else if(tokens[i].type == 41){
+                                left -- ;
+                                if(left==0 && i != n)
+                                        flag = 1;
+                                if(left < 0)
+                                        assert(0);
+                        }
+        }
+                if(left == 0 && flag != 1 && tokens[n].type ==41)
+                        return 1;
+                else if(left == 0)
+                        return 0;
+                else
+                        assert(0);
+}
+        else
+                return 0;
+
+}
+
+int dominant_operator(int p ,int q ){
+	int theop = p;
+	int j = p;
+	int m = 0;
+	for( ; j<=q ;j++){
+		if(tokens[j].type<257 && tokens[j].type != '!'){
+			if(tokens[j].type == 40){
+				m++;
+				for(j=j+1 ; tokens[j].type != 41 || m!=1 ;j++){
+					if(tokens[j].type == 40)	m++;
+					if(tokens[j].type == 41)	m--;
+					}
+					m = 0;
+
+}
+}
+}
+	return theop;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 uint32_t expr(char *e, bool *success) {
 	if(!make_token(e)) {
 		*success = false;
@@ -143,32 +226,3 @@ uint32_t expr(char *e, bool *success) {
 	return 0;
 }
 
-bool check_parentheses(int m ,int n){
-	int left = 0;
-	int flag = 0;
-	if(tokens[m].type == 40){
-		left ++;
-		int i;
-		for(i = m+1 ; i<=n ; i++){
-			if(tokens[i].type == 40){
-				left ++ ;
-			}
-			else if(tokens[i].type == 41){
-				left -- ;
-				if(left==0 && i != n)
-					flag = 1;
-				if(left < 0)
-					assert(0);
-			}
-	}
-		if(left == 0 && flag != 1 && tokens[n].type ==41)
-			return 1;
-		else if(left == 0)
-			return 0;	
-		else 
-			assert(0);
-}	
-	else
-		return 0;
-
-}
