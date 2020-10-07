@@ -8,8 +8,8 @@
 
 enum {
 	NOTYPE = 256, EQ , UEQ , logical_AND , logical_OR,
-	logical_NOT , Dec_integer
-
+	logical_NOT , Dec_integer , Register, Variable ,Hex,
+	Eip
 	/* TODO: Add more token types */
 
 };
@@ -35,7 +35,10 @@ static struct rule {
 	{"!",logical_NOT},				//logical not
 	{"\\(",'('},					//left parenthesis
 	{"\\)",')'},                   			//right parenthesis
-	{"[0-9]{1,10}",Dec_integer}			//decimal integer
+	{"[0-9]{1,10}",Dec_integer},			//decimal integer
+	{"\\$[a-dA-D][hlHL]|\\$[eE]?(ax|dx|cx|bx|bp|si|di|sp)",Register}, //register
+	{"[a_zA_Z_][a-zA-Z0-9]*",Variable},		//variable
+	{"0[xX][A-Fa-f0-9]{1,8}",Hex},			//hex
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
@@ -90,13 +93,44 @@ static bool make_token(char *e) {
 				 */
 
 				switch(rules[i].token_type) {
-					case 257:
+						case 257:
 							tokens[nr_token].type = 257 ;
 							strcpy(tokens[nr_token].str , "==");
 							break;
                                                 case 258:
                                                         tokens[nr_token].type = 258 ;
                                                         strcpy(tokens[nr_token].str , "!=");
+                                                        break;
+                                                case 259:
+                                                        tokens[nr_token].type = 259 ;
+                                                        strcpy(tokens[nr_token].str , "&&");
+                                                        break;
+                                                case 260:
+                                                        tokens[nr_token].type = 260 ;
+                                                        strcpy(tokens[nr_token].str , "||");
+                                                        break;
+                                                case 261:
+                                                        tokens[nr_token].type = 261 ;
+                                                        strcpy(tokens[nr_token].str , "!");
+                                                        break;
+                                                case 262:	//Die_integer
+                                                        tokens[nr_token].type = 262 ;
+                                                        break;
+                                                case 263:	//Register
+                                                        tokens[nr_token].type = 263 ;
+                                                        strncpy(tokens[nr_token].str , &e[position-substr_len] , substr_len);
+                                                        break;
+                                                case 264:	//Variable
+                                                        tokens[nr_token].type = 264 ;
+                                                        strncpy(tokens[nr_token].str , &e[position-substr_len] , substr_len);
+                                                        break;
+                                                case 265:	//Hex
+                                                        tokens[nr_token].type = 265 ;
+                                                        strncpy(tokens[nr_token].str , &e[position-substr_len] , substr_len);
+                                                        break;
+                                                case 266:	//Eip
+                                                        tokens[nr_token].type = 266 ;
+                                                        strncpy(tokens[nr_token].str , &e[position-substr_len] , substr_len);
                                                         break;
                                                 case 40:
                                                         tokens[nr_token].type = 40 ;	//'('
@@ -183,37 +217,35 @@ int dominant_operator(int p ,int q ){
 }
 
 
+/* int eval(int p ,int q){
+//	int i=0;
+	if(p > q )	assert(0);
+//	else if(p == q){
+//		if(tokens[p].type)
+//}
+	else{
+		if(strcmp(tokens[p].str+1 , "al")==0)
+			return reg_b(0);
+		if(strcmp(tokens[p].str+1 , "cl")==0)
+                        return reg_b(1);
+		if(strcmp(tokens[p].str+1 , "dl")==0)
+                        return reg_b(2);
+		if(strcmp(tokens[p].str+1 , "bl")==0)
+                        return reg_b(3);
+		if(strcmp(tokens[p].str+1 , "ah")==0)
+                        return reg_b(4);
+		if(strcmp(tokens[p].str+1 , "ch")==0)
+                        return reg_b(5);
+		if(strcmp(tokens[p].str+1 , "dh")==0)
+                        return reg_b(6);
+		if(strcmp(tokens[p].str+1 , "bh")==0)
+                        return reg_b(7);
 
 
+}
+//	if(j == 8)	assert(0)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+*/
 
 uint32_t expr(char *e, bool *success) {
 	if(!make_token(e)) {
