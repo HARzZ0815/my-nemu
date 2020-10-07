@@ -128,7 +128,7 @@ static bool make_token(char *e) {
 			return false;
 		}
 	}
-
+	
 	return true; 
 }
 
@@ -143,3 +143,32 @@ uint32_t expr(char *e, bool *success) {
 	return 0;
 }
 
+bool check_parentheses(int m ,int n){
+	int left = 0;
+	int flag = 0;
+	if(tokens[m].type == 40){
+		left ++;
+		int i;
+		for(i = m+1 ; i<=n ; i++){
+			if(tokens[i].type == 40){
+				left ++ ;
+			}
+			else if(tokens[i].type == 41){
+				left -- ;
+				if(left==0 && i != n)
+					flag = 1;
+				if(left < 0)
+					assert(0);
+			}
+	}
+		if(left == 0 && flag != 1 && tokens[n].type ==41)
+			return 1;
+		else if(left == 0)
+			return 0;	
+		else 
+			assert(0);
+}	
+	else
+		return 0;
+
+}
