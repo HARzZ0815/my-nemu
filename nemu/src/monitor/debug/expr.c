@@ -8,7 +8,7 @@
 
 enum {
 	NOTYPE = 256, EQ , UEQ , logical_AND , logical_OR,
-	logical_NOT , Dec_integer , Register, Variable ,Hex,
+	logical_NOT ,  Register, Variable ,Dec_integer ,Hex,
 	Eip
 	/* TODO: Add more token types */
 
@@ -113,14 +113,14 @@ static bool make_token(char *e) {
                                                         tokens[nr_token].type = 261 ;
                                                         strcpy(tokens[nr_token].str , "!");
                                                         break;
-                                                case 262:	//Die_integer
+                                                case 262:	//Register
                                                         tokens[nr_token].type = 262 ;
                                                         break;
-                                                case 263:	//Register
+                                                case 263:	//Variable
                                                         tokens[nr_token].type = 263 ;
                                                         strncpy(tokens[nr_token].str , &e[position-substr_len] , substr_len);
                                                         break;
-                                                case 264:	//Variable
+                                                case 264:	//Die_integer
                                                         tokens[nr_token].type = 264 ;
                                                         strncpy(tokens[nr_token].str , &e[position-substr_len] , substr_len);
                                                         break;
@@ -210,8 +210,16 @@ int dominant_operator(int p ,int q ){
 					}
 					m = 0;
 
-}
-}
+				}
+			else if(tokens[j].type == 260)		theop = j;
+			else if(tokens[j].type == 259 &&(tokens[theop].type<260||tokens[theop].type>=262))	theop=j;
+			else if(tokens[j].type == 258 &&(tokens[theop].type<259||tokens[theop].type>=262))      theop=j;
+			else if(tokens[j].type == 257 &&(tokens[theop].type<258||tokens[theop].type>=262))      theop=j;
+			else if(tokens[j].type == 43 &&(tokens[theop].type<256||tokens[theop].type>=261))      theop=j;
+			else if(tokens[j].type == 45 &&(j == q||tokens[j-1].type>=256||tokens[j-1].type==')')&&(tokens[theop].type<256||tokens[theop].type>=261))      theop=j;
+			else if(tokens[j].type == 47 &&(tokens[theop].type>=261||tokens[theop].type=='('||tokens[theop].type=='*'||tokens[theop].type=='/'))      theop=j;
+			else if(tokens[j].type == 42 &&(j == q||tokens[j-1].type>=256||tokens[j-1].type==')')&&(tokens[theop].type>=261||tokens[theop].type=='('||tokens[theop].type == '*'||tokens[theop].type == '/'))      theop=j;
+}	
 }
 	return theop;
 }
