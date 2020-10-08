@@ -225,12 +225,12 @@ int dominant_operator(int p ,int q ){
 }
 
 
-/* int eval(int p ,int q){
-//	int i=0;
+/*   int eval(int p ,int q){
+	int i=0;
 	if(p > q )	assert(0);
-//	else if(p == q){
-//		if(tokens[p].type)
-//}
+	else if(p == q){
+		if(tokens[p].type)
+}
 	else{
 		if(strcmp(tokens[p].str+1 , "al")==0)
 			return reg_b(0);
@@ -251,10 +251,10 @@ int dominant_operator(int p ,int q ){
 
 
 }
-//	if(j == 8)	assert(0)
+	if(j == 8)	assert(0)
+
 
 */
-
 uint32_t expr(char *e, bool *success) {
 	if(!make_token(e)) {
 		*success = false;
