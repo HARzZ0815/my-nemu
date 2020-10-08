@@ -35,10 +35,10 @@ static struct rule {
 	{"!",logical_NOT},				//logical not
 	{"\\(",'('},					//left parenthesis
 	{"\\)",')'},                   			//right parenthesis
-	{"[0-9]{1,10}",Dec_integer},			//decimal integer
 	{"\\$[a-dA-D][hlHL]|\\$[eE]?(ax|dx|cx|bx|bp|si|di|sp)",Register}, //register
 	{"[a_zA_Z_][a-zA-Z0-9]*",Variable},		//variable
 	{"0[xX][A-Fa-f0-9]{1,8}",Hex},			//hex
+	{"[0-9]{1,10}",Dec_integer},			//decimal integer
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
