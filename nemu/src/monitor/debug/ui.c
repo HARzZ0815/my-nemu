@@ -96,6 +96,31 @@ static int cmd_x(char *args){
 
 }
 
+
+static int cmd_p(char *args)
+{
+	bool success;
+	int i;
+	i=expr(args,&success);
+	printf("%d\n",i);
+	return 0;
+}
+
+/*static int cmd_w(char *args)
+{
+	new_wp(args);
+	return 0;
+}
+
+static int cmd_d(char *args)
+{
+	int i;
+	sscanf(args,"%d",&i);
+	free_wp(i);
+	return 0;
+}
+
+*/
 static struct {
 	char *name;
 	char *description;
@@ -107,6 +132,9 @@ static struct {
         { "si", "Single step instructions", cmd_si },
 	{ "info","Print register status" , cmd_info },
 	{ "x" ,"scan memory" , cmd_x },
+	{ "p", "p EXPR means evaluation of expression", cmd_p },
+      //  {"w","Setting the monitoring point",cmd_w},
+       // {"d","Delete monitoring point",cmd_d}, 
 	/* TODO: Add more commands */
 
 };

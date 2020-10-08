@@ -225,36 +225,120 @@ int dominant_operator(int p ,int q ){
 }
 
 
-/*   int eval(int p ,int q){
+int eval(int p,int q)
+{
 	int i=0;
-	if(p > q )	assert(0);
-	else if(p == q){
-		if(tokens[p].type)
+	if(p>q)
+		assert(0);
+	else if(p==q)
+	{
+	
+		if(tokens[p].type==264)
+		{	
+			sscanf(tokens[p].str,"%d",&i);
+			return i;
+		}
+		else if(tokens[p].type==265)
+		{
+			sscanf(tokens[p].str,"%x",&i);
+			return i;		
+		}
+		else if(tokens[p].type==262)
+		{
+			int j=0,sl=1,sw=1;
+			for(;j<8&&sl!=0&&sw!=0;j++)
+			{
+				sl=strcmp(tokens[p].str+1,regsl[j]);
+				sw=strcmp(tokens[p].str+1,regsw[j]);
+			} 		
+			 if(sl==0)
+			{	i=cpu.gpr[j]._32;
+				return i;
+			}
+			else if(sw==0)
+				return cpu.gpr[j]._16;
+			else 
+            {
+				if(strcmp(tokens[p].str,"$al")==0)
+			 		return reg_b(0);
+				if(strcmp(tokens[p].str+1,"cl")==0)
+					return reg_b(1);
+				if(strcmp(tokens[p].str+1,"dl")==0)
+					return reg_b(2);
+				if(strcmp(tokens[p].str+1,"bl")==0)
+					return reg_b(3);
+				if(strcmp(tokens[p].str+1,"ah")==0)
+					return reg_b(4);
+                                if(strcmp(tokens[p].str+1,"ch")==0)
+					return reg_b(5);			
+			        if(strcmp(tokens[p].str+1,"dh")==0)                                                                             
+					return reg_b(6);
+				if(strcmp(tokens[p].str+1,"bh")==0)                                                                
+					return reg_b(7);
+			}
+			if(j==8)
+				assert(0);
+		}
+		else if(tokens[p].type==266)
+			return cpu.eip;
+		else
+			assert(0);
+	}
+	else if(check_parentheses(p,q)==true)
+		return eval(p+1,q-1);
+	else
+	{
+		int op,val1,val2;
+		if((q-p==1)&&tokens[p].type=='-')
+			return 0-eval(q,q);
+		if(((q-p==1)||(tokens[p+1].type=='('&&tokens[q].type==')'))&&tokens[p].type==261)
+		{
+			i=eval(p+1,q);
+			return !i;
+		}
+		if(((q-p==1)||(tokens[p+1].type=='('&&tokens[q].type==')'))&&tokens[p].type=='*')
+		{
+		
+			return  swaddr_read(eval(p+1,q),4);	
+		}
+		op=dominant_operator(p,q);
+			
+		val1=eval(p,op-1);
+		val2=eval(op+1,q);
+		switch(tokens[op].type)
+		{
+			case '+':return val1+val2;
+			case '-':return val1-val2;
+			case '*':return val1*val2;
+			case '/':return val1/val2;
+			case 257:
+				 if(val1==val2)
+				 	return 1;
+				 else
+					 return 0;
+			case 258:
+				if(val1!=val2)
+					return 1;
+				else
+					return 0;
+			case 259:
+				if(val1&&val2)
+					return 1;
+				else
+					return 0;
+			case 260:
+				if(val1||val2)
+					return 1;
+				else
+					return 0;
+			default:assert(0);
+		}
+	}
+	return 0;
 }
-	else{
-		if(strcmp(tokens[p].str+1 , "al")==0)
-			return reg_b(0);
-		if(strcmp(tokens[p].str+1 , "cl")==0)
-                        return reg_b(1);
-		if(strcmp(tokens[p].str+1 , "dl")==0)
-                        return reg_b(2);
-		if(strcmp(tokens[p].str+1 , "bl")==0)
-                        return reg_b(3);
-		if(strcmp(tokens[p].str+1 , "ah")==0)
-                        return reg_b(4);
-		if(strcmp(tokens[p].str+1 , "ch")==0)
-                        return reg_b(5);
-		if(strcmp(tokens[p].str+1 , "dh")==0)
-                        return reg_b(6);
-		if(strcmp(tokens[p].str+1 , "bh")==0)
-                        return reg_b(7);
 
 
-}
-	if(j == 8)	assert(0)
 
-
-*/
 uint32_t expr(char *e, bool *success) {
 	if(!make_token(e)) {
 		*success = false;
@@ -262,6 +346,9 @@ uint32_t expr(char *e, bool *success) {
 	}
 
 	/* TODO: Insert codes to evaluate the expression. */
+	int a;
+          a=eval(0,nr_token);
+            return a;
 	panic("please implement me");
 	return 0;
 }
