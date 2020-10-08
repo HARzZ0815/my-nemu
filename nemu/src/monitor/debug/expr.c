@@ -166,25 +166,25 @@ static bool make_token(char *e) {
 	return true; 
 }
 
-bool check_parentheses(int m ,int n){
+bool check_parentheses(int p ,int q){
         int left = 0;
         int flag = 0;
-        if(tokens[m].type == 40){
+        if(tokens[p].type == 40){
                 left ++;
                 int i;
-                for(i = m+1 ; i<=n ; i++){
+                for(i = p+1 ; i<=q ; i++){
                         if(tokens[i].type == 40){
                                 left ++ ;
                         }
                         else if(tokens[i].type == 41){
                                 left -- ;
-                                if(left==0 && i != n)
+                                if(left==0 && i != q)
                                         flag = 1;
                                 if(left < 0)
                                         assert(0);
                         }
         }
-                if(left == 0 && flag != 1 && tokens[n].type ==41)
+                if(left == 0 && flag != 1 && tokens[q].type ==41)
                         return 1;
                 else if(left == 0)
                         return 0;
