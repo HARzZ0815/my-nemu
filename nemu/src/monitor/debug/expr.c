@@ -163,8 +163,8 @@ static bool make_token(char *e) {
 			tokens[nr_token].type=266;
 			break;      
                                
-					default: panic("please implement me");
-                                                 nr_token--;
+					default:
+                                                // nr_token--;
                                                  break;
 				}
                                 nr_token++;
