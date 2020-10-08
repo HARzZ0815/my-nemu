@@ -42,56 +42,7 @@ static int cmd_q(char *args) {
 }
 
 static int cmd_help(char *args);
-static int cmd_si(char *args);
-static int cmd_info(char *args);
-static int cmd_x(char *args);
-static int cmd_p(char *args);
-static int cmd_w(char *args);
-static int cmd_d(char *args);
 
-
-static struct {
-	char *name;
-	char *description;
-	int (*handler) (char *);
-} cmd_table [] = {
-	{ "help", "Display informations about all supported commands", cmd_help },
-	{ "c", "Continue the execution of the program", cmd_c },
-	{ "q", "Exit NEMU", cmd_q },
-        { "si","Single-step execution", cmd_si },
-        { "info","info r means print register", cmd_info },
-        { "x", "x N $esp means scan memory", cmd_x },
-        { "p", "p EXPR means evaluation of expression", cmd_p },
-        {"w","Setting the monitoring point",cmd_w},
-        {"d","Delete monitoring point",cmd_d}, 
-	/* TODO: Add more commands */
-
-};
-
-#define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))
-
-static int cmd_help(char *args) {
-	/* extract the first argument */
-	char *arg = strtok(NULL, " ");
-	int i;
-
-	if(arg == NULL) {
-		/* no argument given */
-		for(i = 0; i < NR_CMD; i ++) {
-			printf("%s - %s\n", cmd_table[i].name, cmd_table[i].description);
-		}
-	}
-	else {
-		for(i = 0; i < NR_CMD; i ++) {
-			if(strcmp(arg, cmd_table[i].name) == 0) {
-				printf("%s - %s\n", cmd_table[i].name, cmd_table[i].description);
-				return 0;
-			}
-		}
-		printf("Unknown command '%s'\n", arg);
-	}
-	return 0;
-}
 static int cmd_si(char *args){
           char *arg = strtok(NULL, " ");
           int i = 0, j = 0;
@@ -171,11 +122,48 @@ static int cmd_d(char *args)
 	return 0;
 }
 
+static struct {
+	char *name;
+	char *description;
+	int (*handler) (char *);
+} cmd_table [] = {
+	{ "help", "Display informations about all supported commands", cmd_help },
+	{ "c", "Continue the execution of the program", cmd_c },
+	{ "q", "Exit NEMU", cmd_q },
+        { "si","Single-step execution", cmd_si },
+        { "info","info r means print register", cmd_info },
+        { "x", "x N $esp means scan memory", cmd_x },
+        { "p", "p EXPR means evaluation of expression", cmd_p },
+        {"w","Setting the monitoring point",cmd_w},
+        {"d","Delete monitoring point",cmd_d}, 
+	/* TODO: Add more commands */
 
+};
 
+#define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))
 
+static int cmd_help(char *args) {
+	/* extract the first argument */
+	char *arg = strtok(NULL, " ");
+	int i;
 
-
+	if(arg == NULL) {
+		/* no argument given */
+		for(i = 0; i < NR_CMD; i ++) {
+			printf("%s - %s\n", cmd_table[i].name, cmd_table[i].description);
+		}
+	}
+	else {
+		for(i = 0; i < NR_CMD; i ++) {
+			if(strcmp(arg, cmd_table[i].name) == 0) {
+				printf("%s - %s\n", cmd_table[i].name, cmd_table[i].description);
+				return 0;
+			}
+		}
+		printf("Unknown command '%s'\n", arg);
+	}
+	return 0;
+}
 
 
 
