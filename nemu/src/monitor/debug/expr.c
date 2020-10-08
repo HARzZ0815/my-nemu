@@ -196,7 +196,7 @@ bool check_parentheses(int p ,int q){
 
 }
 
-int dominant_operator(int p ,int q ){
+int find_dominant_operator(int p ,int q ){
 	int theop = p;
 	int j = p;
 	int m = 0;
@@ -223,7 +223,6 @@ int dominant_operator(int p ,int q ){
 }
 	return theop;
 }
-
 
 int eval(int p,int q)
 {
@@ -301,7 +300,7 @@ int eval(int p,int q)
 		
 			return  swaddr_read(eval(p+1,q),4);	
 		}
-		op=dominant_operator(p,q);
+		op=find_dominant_operator(p,q);
 			
 		val1=eval(p,op-1);
 		val2=eval(op+1,q);
