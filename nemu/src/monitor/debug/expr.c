@@ -164,7 +164,7 @@ static bool make_token(char *e) {
 			break;      
                                
 					default:
-                                                // nr_token--;
+                                                 nr_token--;
                                                  break;
 				}
                                 nr_token++;
