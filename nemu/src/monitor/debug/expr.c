@@ -38,6 +38,7 @@ static struct rule {
         {"\\$[a-dA-D][hlHL]|\\$[eE]?(ax|dx|cx|bx|bp|si|di|sp)", Register}, //register
         {"[a_zA_Z_][a-zA-Z0-9_]*", Variable},           //variable
         {"[0-9]{1,10}", Number},                        //nmumber
+	{"\\$[Ee][Ii][Pp]" ,Eip}			//Eip
         
 };
 
