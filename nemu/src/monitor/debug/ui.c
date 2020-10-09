@@ -85,21 +85,33 @@ static int cmd_info(char *args)
 }
 
 static int cmd_x(char *args){
-          char *arg1 = strtok(NULL, " ");
-          char *arg2 = strtok(NULL, " ");
-          int len, i = 0;
-          swaddr_t address;
-          
-          sscanf(arg1, "%d", &len);
-          sscanf(arg2, "%x", &address);
-      
-          printf("0x%x:", address);
-          for(i = 0;i < len;i++){
-                 printf("0x%x ",swaddr_read(address, 4) );
-                 address += 4;
-          }
-          printf("\n");
-          return 0;
+	char *arg1 = strtok(NULL," ");
+	char *arg2 = strtok(NULL," ");
+	int len ;
+	int address;
+//	lnaddr_t address;
+	sscanf(arg1 , "%d" ,&len);
+	sscanf(arg2 , "%x" ,&address);
+//	printf("0x:%x\n",address);
+//	int i;
+//	for(i = 0; i<len ;i++){
+//		printf("0x%x\n",lnaddr_read(address,4));
+//		address+=4;
+//	}
+//		return 0;
+	
+	if(len !=0){
+		printf("%#x: ", address);
+		int i,j;
+		for( i=0 ; i<len ;i++){
+			for(j=0 ;j<4;j++){
+				printf("%02X ",swaddr_read(address+4*i+j,1));
+}
+}
+		printf("\n");
+}	
+		return 0;
+
 }
 
 static int cmd_p(char *args)
