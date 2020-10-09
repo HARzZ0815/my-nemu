@@ -43,7 +43,20 @@ static int cmd_q(char *args) {
 
 static int cmd_help(char *args);
 
+
 static int cmd_si(char *args){
+	int step = 0;
+	char *arg = strtok(NULL," ");
+	if (arg == NULL)	step =1;
+	else	sscanf(arg , "%d" , &step);
+	if(step == -1)		cpu_exec(-1);
+	if(step < -1)	printf("Wrong input\n");
+	if(step > -1)
+	while(step--)
+	cpu_exec(1);
+	return 0;
+}
+/*static int cmd_si(char *args){
           char *arg = strtok(NULL, " ");
           int i = 0, j = 0;
           if(arg == NULL){
@@ -63,7 +76,7 @@ static int cmd_si(char *args){
           }
           return 0;
 }
-
+*/
 static int cmd_info(char *args)
 {
 	char *arg=strtok(NULL," ");
